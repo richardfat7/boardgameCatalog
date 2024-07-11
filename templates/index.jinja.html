@@ -1,0 +1,61 @@
+{% extends "base.jinja.html" %}
+
+{% block style %}
+<style>
+    .alt_name {
+        color: grey;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        {% for g in game %}
+        <div class="col">
+            <div class="card h-100">
+                <div id="gamePhotos_{{g.id}}" class="carousel slide card-img-top">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="{{ g.cover_photo_path }}" class="d-block w-100">
+                        </div>
+                        {% for photo in g.other_photo_paths|fromjson or [] %}
+                        <div class="carousel-item">
+                            <img src="{{ photo }}" class="d-block w-100">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if g.other_photo_paths %}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#gamePhotos_{{g.id}}"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#gamePhotos_{{g.id}}"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"><span class="main_name">{{ g.name }}</span><span class="alt_name ms-1">{{
+                            g.alt_name or "" }}</span></h5>
+                    <p class="card-text">{{ '<i>No description</i>'|safe if g.description is none else g.description|markup|safe }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="fa-solid fa-users me-1"></i>{{ g.min_player }} - {{
+                        g.max_player }} 名玩家</li>
+                    <li class="list-group-item"><i class="fa-solid fa-clock me-1"></i>{{ g.duration_min }} 分鐘</li>
+                    <li class="list-group-item"><i class="fa-solid fa-language me-1"></i>{{ g.lang | humanize_lang }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="pt-3"></div>
+<div class="pt-3"></div>
+<div class="pt-3"></div>
+{% endblock %}
